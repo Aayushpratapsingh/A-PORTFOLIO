@@ -146,7 +146,7 @@ export default function Home() {
           <div className="about-layout">
             <div className="about-story" data-reveal>
               <p className="about-story__lead">
-                I&apos;m a <strong>BCA student</strong> passionate about front-end development and creating intuitive digital experiences. I believe in building applications that are both visually appealing and functionally seamless.
+                I&apos;m a <strong>BCA student</strong> passionate about Full Stack Developer and creating intuitive digital experiences. I believe in building applications that are both visually appealing and functionally seamless.
               </p>
               <p className="about-story__detail">
                 Over the last 2 years, I&apos;ve worked on diverse projects — from sleek landing pages to complex web apps — constantly learning and refining my craft.
