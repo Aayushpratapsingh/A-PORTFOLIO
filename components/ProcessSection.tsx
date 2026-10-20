@@ -51,7 +51,6 @@ export default function ProcessSection() {
       ease: "linear",
       repeat: Infinity,
       repeatType: "loop",
-      repeatDelay: 0.35,
     });
 
     return () => loop.stop();

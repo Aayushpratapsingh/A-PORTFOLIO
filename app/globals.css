@@ -3181,6 +3181,11 @@ img {
 .process-path__track { stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 4 8; }
 .process-path__drawn { stroke: var(--accent); stroke-width: 1.5; filter: drop-shadow(0 0 5px var(--accent-soft)); }
 .process-path__arrows { stroke: var(--accent); stroke-width: 1.5; opacity: .55; }
+.process-path__arrow-flow { opacity: .18; animation: process-arrow-flow 9s linear infinite; }
+@keyframes process-arrow-flow {
+  0%, 12%, 100% { opacity: .18; }
+  4%, 8% { opacity: 1; }
+}
 .process-path__dot-halo { fill: var(--accent-soft); }
 .process-path__dot-core { fill: var(--accent); }
 .process-path__dot--hidden { display: none; }
@@ -3222,6 +3227,7 @@ img {
   .process-section::after { animation: none; }
   .process-path__dot { display: none; }
   .process-path__drawn { stroke-dashoffset: 0 !important; }
+  .process-path__arrow-flow { animation: none; opacity: .55; }
   .process-card,
   .process-card__corner,
   .process-card__spotlight { transition: none; }
