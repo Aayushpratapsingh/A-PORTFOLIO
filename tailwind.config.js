@@ -12,9 +12,9 @@ module.exports = {
         "accent-soft": "var(--accent-soft)",
       },
       fontFamily: {
-        display: ["var(--font-syne)"],
-        sans: ["var(--font-dm-sans)"],
-        mono: ["var(--font-dm-mono)"],
+        display: ["var(--font-display)"],
+        sans: ["var(--font-body)"],
+        mono: ["var(--font-code)"],
       },
     },
   },
