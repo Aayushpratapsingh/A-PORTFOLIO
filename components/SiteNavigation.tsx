@@ -5,18 +5,18 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const links = [
-  { label: "HOME", href: "#home" },
-  { label: "WORK", href: "#design" },
-  { label: "PROCESS", href: "#process" },
-  { label: "ABOUT", href: "#about" },
-  { label: "CONTACT", href: "#contact" },
+  { label: "HOME", href: "/#home" },
+  { label: "WORK", href: "/#design" },
+  { label: "PROCESS", href: "/#process" },
+  { label: "ABOUT", href: "/#about" },
+  { label: "CONTACT", href: "/#contact" },
 ];
 
 const projectLinks = [
-  { label: "PERSPECTIVE / BRAND IDENTITY", href: "#design" },
-  { label: "AIR JORDAN / PRODUCT DESIGN", href: "#design" },
-  { label: "SWIFLO / DIGITAL WALLET", href: "#work" },
-  { label: "ALPHA / WEB EXPERIENCE", href: "#work" },
+  { label: "PERSPECTIVE / BRAND IDENTITY", href: "/#design" },
+  { label: "AIR JORDAN / PRODUCT DESIGN", href: "/#design" },
+  { label: "SWIFLO / DIGITAL WALLET", href: "/#work" },
+  { label: "ALPHA / WEB EXPERIENCE", href: "/#work" },
 ];
 
 export default function SiteNavigation() {
@@ -70,7 +70,7 @@ export default function SiteNavigation() {
     <>
       <header className="site-nav">
         <nav className="site-nav__inner film-nav" aria-label="Main navigation">
-          <a className="site-nav__brand" href="#home" aria-label="Aayush Singh home">
+          <a className="site-nav__brand" href="/#home" aria-label="Aayush Singh home">
             AS
           </a>
           <button

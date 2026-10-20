@@ -1,26 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Mono, DM_Sans, Syne } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const syne = Syne({
-  subsets: ["latin"],
-  weight: "800",
-  display: "swap",
-  variable: "--font-syne-loaded",
-});
-
-const dmSans = DM_Sans({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: "variable",
   display: "swap",
-  variable: "--font-dm-sans-loaded",
+  variable: "--font-display-loaded",
 });
 
-const dmMono = DM_Mono({
+const ibmPlexSans = IBM_Plex_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-body-loaded",
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   display: "swap",
-  variable: "--font-dm-mono-loaded",
+  variable: "--font-code-loaded",
 });
 
 export const metadata: Metadata = {
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#141210",
+  themeColor: "#b8f45c",
 };
 
 export default function RootLayout({
@@ -58,7 +58,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${syne.variable} ${dmSans.variable} ${dmMono.variable}`}
+      className={`${spaceGrotesk.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable}`}
     >
       <body>{children}</body>
     </html>

@@ -6,6 +6,7 @@ import CustomCursor from "../components/CustomCursor";
 import ContactForm from "../components/ContactForm";
 import HudBar from "../components/HudBar";
 import Hero from "../components/Hero";
+import ProcessSection from "../components/ProcessSection";
 import { 
   Github, Linkedin, Mail,
   Code, Terminal, Palette, Layers, Smartphone, Layout
@@ -266,6 +267,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <ProcessSection />
 
       {/* SKILLS SECTION */}
       <section id="skills" className="editorial-section editorial-section--spacious skills-section">
