@@ -3188,6 +3188,7 @@ img {
 }
 .process-path__dot-halo { fill: var(--accent-soft); }
 .process-path__dot-core { fill: var(--accent); }
+.process-path__dot-arrow { fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .process-path__dot--hidden { display: none; }
 .process-section__footnote { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-family: var(--font-code); font-size: var(--text-xs); letter-spacing: .1em; }
 .process-section__footnote > span > span { color: var(--accent); }

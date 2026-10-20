@@ -126,6 +126,7 @@ export default function ProcessPath({
   const [pathLength, setPathLength] = useState(0);
   const dotX = useMotionValue(0);
   const dotY = useMotionValue(0);
+  const dotAngle = useMotionValue(0);
   const dashOffset = useMotionValue(0);
 
   const measure = useCallback(() => {
@@ -185,9 +186,13 @@ export default function ProcessPath({
     const path = basePathRef.current;
     if (!path || !pathLength) return;
     const clampedProgress = Math.max(0, Math.min(1, value));
-    const point = path.getPointAtLength(clampedProgress * pathLength);
+    const distance = clampedProgress * pathLength;
+    const point = path.getPointAtLength(distance);
+    const before = path.getPointAtLength(Math.max(0, distance - 2));
+    const after = path.getPointAtLength(Math.min(pathLength, distance + 2));
     dotX.set(point.x);
     dotY.set(point.y);
+    dotAngle.set(Math.atan2(after.y - before.y, after.x - before.x) * (180 / Math.PI));
     dashOffset.set(pathLength * (1 - clampedProgress));
 
     let activeIndex = 0;
@@ -195,7 +200,7 @@ export default function ProcessPath({
       if (value >= anchor) activeIndex = index;
     });
     onActiveStep(activeIndex);
-  }, [anchorProgress, dashOffset, dotX, dotY, onActiveStep, pathLength]);
+  }, [anchorProgress, dashOffset, dotAngle, dotX, dotY, onActiveStep, pathLength]);
 
   useMotionValueEvent(progress, "change", followProgress);
   useLayoutEffect(() => followProgress(progress.get()), [followProgress, progress]);
@@ -230,9 +235,13 @@ export default function ProcessPath({
               staticMotion={staticMotion}
             />
           ))}
-          <motion.g className={`process-path__dot${staticMotion ? " process-path__dot--hidden" : ""}`} style={{ x: dotX, y: dotY }}>
+          <motion.g
+            className={`process-path__dot${staticMotion ? " process-path__dot--hidden" : ""}`}
+            style={{ x: dotX, y: dotY, rotate: dotAngle }}
+          >
             <circle r="10" className="process-path__dot-halo" filter="url(#process-path-dot-glow)" />
-            <circle r="3.5" className="process-path__dot-core" />
+            <circle r="2.5" className="process-path__dot-core" />
+            <path d="M -5 -5 L 2 0 L -5 5" className="process-path__dot-arrow" filter="url(#process-path-dot-glow)" />
           </motion.g>
         </>
       )}
