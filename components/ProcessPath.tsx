@@ -6,7 +6,7 @@ import {
   useMotionValueEvent,
   type MotionValue,
 } from "framer-motion";
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties, RefObject } from "react";
 
 type Point = { x: number; y: number };
@@ -98,6 +98,17 @@ function closestProgress(path: SVGPathElement, target: Point, length: number) {
   return closestDistance / length;
 }
 
+function getCardCenters(map: HTMLDivElement, list: HTMLOListElement, isMobile: boolean) {
+  const mapBounds = map.getBoundingClientRect();
+  return Array.from(list.querySelectorAll<HTMLLIElement>(".process-list__item"), (card) => {
+    const bounds = card.getBoundingClientRect();
+    return {
+      x: isMobile ? 12 : bounds.left - mapBounds.left + bounds.width / 2,
+      y: bounds.top - mapBounds.top + bounds.height / 2,
+    };
+  });
+}
+
 function ProcessArrow({
   d,
   x,
@@ -112,7 +123,7 @@ function ProcessArrow({
   staticMotion: boolean;
 }) {
   const style = staticMotion ? undefined : {
-    animationDelay: `${-index * 1.8}s`,
+    animationDelay: `${index * 1.8}s`,
     "--flow-half-x": `${x * 0.35}px`,
     "--flow-half-y": `${y * 0.35}px`,
     "--flow-x": `${x}px`,
@@ -155,27 +166,28 @@ export default function ProcessPath({
     if (!width || !height) return;
 
     const isMobile = window.matchMedia("(max-width: 640px)").matches;
-    const points = cardRefs.current.flatMap((card) => {
-      if (!card) return [];
-      return [{
-        x: isMobile ? 12 : list.offsetLeft + card.offsetLeft + card.offsetWidth / 2,
-        y: list.offsetTop + card.offsetTop + card.offsetHeight / 2,
-      }];
-    });
+    const points = getCardCenters(map, list, isMobile);
 
     if (points.length !== 6) return;
     setGeometry({ d: roundedPath(points, isMobile ? 0 : 28), arrows: arrowPaths(points), width, height });
-  }, [cardRefs, listRef, mapRef]);
+  }, [listRef, mapRef]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const map = mapRef.current;
-    if (!map) return;
+    const list = listRef.current;
+    if (!map || !list) return;
     const observer = new ResizeObserver(measure);
     observer.observe(map);
+    observer.observe(list);
     cardRefs.current.forEach((card) => card && observer.observe(card));
-    measure();
-    return () => observer.disconnect();
-  }, [cardRefs, mapRef, measure]);
+    const frame = window.requestAnimationFrame(measure);
+    window.addEventListener("resize", measure);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", measure);
+      observer.disconnect();
+    };
+  }, [cardRefs, listRef, mapRef, measure]);
 
   useLayoutEffect(() => {
     const path = basePathRef.current;
@@ -186,13 +198,7 @@ export default function ProcessPath({
     if (!map || !list || !length) return;
 
     const isMobile = window.matchMedia("(max-width: 640px)").matches;
-    const centers = cardRefs.current.flatMap((card) => {
-      if (!card) return [];
-      return [{
-        x: isMobile ? 12 : list.offsetLeft + card.offsetLeft + card.offsetWidth / 2,
-        y: list.offsetTop + card.offsetTop + card.offsetHeight / 2,
-      }];
-    });
+    const centers = getCardCenters(map, list, isMobile);
     const anchors = centers.map((center) => closestProgress(path, center, length));
     setPathLength(length);
     setAnchorProgress(anchors);
