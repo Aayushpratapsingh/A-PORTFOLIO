@@ -7,7 +7,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
-import type { RefObject } from "react";
+import type { CSSProperties, RefObject } from "react";
 
 type Point = { x: number; y: number };
 
@@ -22,7 +22,7 @@ type ProcessPathProps = {
 
 type PathGeometry = {
   d: string;
-  arrows: string[];
+  arrows: { d: string; x: number; y: number }[];
   width: number;
   height: number;
 };
@@ -74,7 +74,11 @@ function arrowPaths(points: Point[]) {
     const tipY = my + uy * 4;
     const baseX = mx - ux * 4;
     const baseY = my - uy * 4;
-    return `M ${baseX + px * 4} ${baseY + py * 4} L ${tipX} ${tipY} L ${baseX - px * 4} ${baseY - py * 4}`;
+    return {
+      d: `M ${baseX + px * 4} ${baseY + py * 4} L ${tipX} ${tipY} L ${baseX - px * 4} ${baseY - py * 4}`,
+      x: ux * 12,
+      y: uy * 12,
+    };
   });
 }
 
@@ -96,18 +100,30 @@ function closestProgress(path: SVGPathElement, target: Point, length: number) {
 
 function ProcessArrow({
   d,
+  x,
+  y,
   index,
   staticMotion,
 }: {
   d: string;
+  x: number;
+  y: number;
   index: number;
   staticMotion: boolean;
 }) {
+  const style = staticMotion ? undefined : {
+    animationDelay: `${-index * 1.8}s`,
+    "--flow-half-x": `${x * 0.35}px`,
+    "--flow-half-y": `${y * 0.35}px`,
+    "--flow-x": `${x}px`,
+    "--flow-y": `${y}px`,
+  } as CSSProperties;
+
   return (
     <path
       className={`process-path__arrows${staticMotion ? "" : " process-path__arrow-flow"}`}
       d={d}
-      style={staticMotion ? undefined : { animationDelay: `${-index * 1.8}s` }}
+      style={style}
     />
   );
 }
@@ -230,7 +246,9 @@ export default function ProcessPath({
           {geometry.arrows.map((arrow, index) => (
             <ProcessArrow
               key={index}
-              d={arrow}
+              d={arrow.d}
+              x={arrow.x}
+              y={arrow.y}
               index={index}
               staticMotion={staticMotion}
             />

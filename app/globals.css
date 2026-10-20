@@ -3181,10 +3181,12 @@ img {
 .process-path__track { stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 4 8; }
 .process-path__drawn { stroke: var(--accent); stroke-width: 1.5; filter: drop-shadow(0 0 5px var(--accent-soft)); }
 .process-path__arrows { stroke: var(--accent); stroke-width: 1.5; opacity: .55; }
-.process-path__arrow-flow { opacity: .18; animation: process-arrow-flow 9s linear infinite; }
+.process-path__arrow-flow { opacity: .18; transform-box: fill-box; transform-origin: center; animation: process-arrow-flow 9s linear infinite; }
 @keyframes process-arrow-flow {
-  0%, 12%, 100% { opacity: .18; }
-  4%, 8% { opacity: 1; }
+  0%, 100% { opacity: .18; transform: translate(0, 0); }
+  3% { opacity: 1; transform: translate(var(--flow-half-x), var(--flow-half-y)); }
+  8% { opacity: 1; transform: translate(var(--flow-x), var(--flow-y)); }
+  12% { opacity: .18; transform: translate(var(--flow-x), var(--flow-y)); }
 }
 .process-path__dot-halo { fill: var(--accent-soft); }
 .process-path__dot-core { fill: var(--accent); }
