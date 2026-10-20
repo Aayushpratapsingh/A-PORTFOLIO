@@ -4,7 +4,6 @@ import {
   motion,
   useMotionValue,
   useMotionValueEvent,
-  useTransform,
   type MotionValue,
 } from "framer-motion";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
@@ -97,26 +96,18 @@ function closestProgress(path: SVGPathElement, target: Point, length: number) {
 
 function ProcessArrow({
   d,
-  at,
-  progress,
+  index,
   staticMotion,
 }: {
   d: string;
-  at: number;
-  progress: MotionValue<number>;
+  index: number;
   staticMotion: boolean;
 }) {
-  const opacity = useTransform(
-    progress,
-    [Math.max(0, at - 0.075), at, Math.min(1, at + 0.075)],
-    [0.18, 1, 0.18],
-  );
-
   return (
-    <motion.path
-      className="process-path__arrows"
+    <path
+      className={`process-path__arrows${staticMotion ? "" : " process-path__arrow-flow"}`}
       d={d}
-      style={{ opacity: staticMotion ? 0.55 : opacity }}
+      style={staticMotion ? undefined : { animationDelay: `${-index * 1.8}s` }}
     />
   );
 }
@@ -132,7 +123,6 @@ export default function ProcessPath({
   const basePathRef = useRef<SVGPathElement>(null);
   const [geometry, setGeometry] = useState<PathGeometry>({ d: "", arrows: [], width: 1, height: 1 });
   const [anchorProgress, setAnchorProgress] = useState<number[]>([]);
-  const [arrowProgress, setArrowProgress] = useState<number[]>([]);
   const [pathLength, setPathLength] = useState(0);
   const dotX = useMotionValue(0);
   const dotY = useMotionValue(0);
@@ -187,14 +177,8 @@ export default function ProcessPath({
       }];
     });
     const anchors = centers.map((center) => closestProgress(path, center, length));
-    const arrowAnchors = centers.slice(0, -1).map((center, index) => closestProgress(path, {
-      x: (center.x + centers[index + 1].x) / 2,
-      y: (center.y + centers[index + 1].y) / 2,
-    }, length));
-
     setPathLength(length);
     setAnchorProgress(anchors);
-    setArrowProgress(arrowAnchors);
   }, [cardRefs, geometry.d, listRef, mapRef]);
 
   const followProgress = useCallback((value: number) => {
@@ -242,8 +226,7 @@ export default function ProcessPath({
             <ProcessArrow
               key={index}
               d={arrow}
-              at={arrowProgress[index] ?? (index + 0.5) / (geometry.arrows.length + 1)}
-              progress={progress}
+              index={index}
               staticMotion={staticMotion}
             />
           ))}
